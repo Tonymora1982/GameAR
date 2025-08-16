@@ -1,7 +1,6 @@
 package com.canchas.app.presentation.map
 
 import android.Manifest
-import android.location.Location
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -9,13 +8,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.canchas.app.presentation.map.MapViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.maps.android.compose.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun VenueMapScreen() {
+fun VenueMapScreen(viewModel: MapViewModel = hiltViewModel()) {
+    val state by viewModel.uiState.collectAsState()
+
     val permissions = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -56,8 +59,22 @@ fun VenueMapScreen() {
                 properties = MapProperties(isMyLocationEnabled = true),
                 uiSettings = MapUiSettings(myLocationButtonEnabled = true)
             ) {
-                // TODO: Load and plot venues from Firestore
+                state.venues.forEach { v ->
+                    Marker(
+                        state = MarkerState(position = com.google.android.gms.maps.model.LatLng(v.location.latitude, v.location.longitude)),
+                        title = v.name,
+                        snippet = v.address
+                    )
+                }
             }
+        }
+
+        if (state.loading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+
+        state.error?.let { err ->
+            Snackbar(modifier = Modifier.align(Alignment.BottomCenter)) { Text(err) }
         }
     }
 }
