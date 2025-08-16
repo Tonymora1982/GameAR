@@ -42,12 +42,13 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
+        // Align Compose compiler with Kotlin 2.0.x
+        kotlinCompilerExtensionVersion = "1.6.10"
     }
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}" 
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
@@ -57,9 +58,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation(platform("androidx.compose:compose-bom:2025.05.00"))
 
-    // Firebase
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore")
+    // Firebase (use KTX variants)
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 
     // Google Sign-In + Credentials
     implementation("com.google.android.gms:play-services-auth:21.2.0")
@@ -69,6 +70,7 @@ dependencies {
 
     // Location + Maps
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     val mapsCompose = "4.4.1"
     implementation("com.google.maps.android:maps-compose:$mapsCompose")
     implementation("com.google.maps.android:maps-compose-utils:$mapsCompose")
@@ -81,6 +83,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
     implementation("androidx.navigation:navigation-compose:2.8.0")
 
     // Hilt
