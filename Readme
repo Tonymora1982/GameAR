@@ -1,1 +1,15 @@
 Definicion general del proyecto
+
+Este repositorio contiene el MVP nativo Android para gestionar reservación de canchas de fútbol amateur.
+
+Características del MVP:
+- Login con Google (Firebase Auth) [pendiente credenciales]
+- Firestore (usuarios, canchas, reservaciones) [pendiente credenciales]
+- Google Maps (Compose) [pendiente API Key]
+
+Estructura principal:
+- /app/android → Proyecto Android (Kotlin, Compose, Hilt, Firebase BoM, Maps Compose)
+- /app/android/docs → Documentación técnica (arquitectura, modelo de datos, reglas, setup)
+
+Cómo iniciar:
+- Abre /app/android en Android Studio, sincroniza Gradle y ejecuta. Los servicios de Google/Firebase se integrarán cuando se suministren llaves.
