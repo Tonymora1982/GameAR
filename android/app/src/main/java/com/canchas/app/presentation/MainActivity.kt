@@ -8,9 +8,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.canchas.app.presentation.auth.AuthScreen
 import com.canchas.app.presentation.auth.AuthViewModel
-import com.canchas.app.presentation.map.VenueMapScreen
+import com.canchas.app.presentation.navigation.AppNavGraph
 import com.canchas.app.ui.theme.CanchasTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,10 +30,5 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppEntry(authViewModel: AuthViewModel = hiltViewModel()) {
     val uiState = authViewModel.uiState.collectAsStateWithLifecycle().value
-
-    if (uiState.isAuthenticated) {
-        VenueMapScreen()
-    } else {
-        AuthScreen()
-    }
+    AppNavGraph(isAuthenticated = uiState.isAuthenticated)
 }

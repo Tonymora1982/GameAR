@@ -1,10 +1,9 @@
 package com.canchas.app.di
 
 import android.app.Application
-import com.canchas.app.data.repository.FirestoreReservationRepository
-import com.canchas.app.data.repository.FirestoreVenueRepository
-import com.canchas.app.data.repository.ReservationRepository
-import com.canchas.app.data.repository.VenueRepository
+import com.canchas.app.data.repository.*
+import com.canchas.app.data.repository.inmemory.InMemoryReservationRepository
+import com.canchas.app.data.repository.inmemory.InMemoryVenueRepository
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
@@ -18,22 +17,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideFirestore(app: Application): FirebaseFirestore {
-        FirebaseApp.initializeApp(app)
-        return FirebaseFirestore.getInstance().apply {
-            firestoreSettings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build()
-        }
-    }
+    // En producción proveeremos Firestore real. Mientras tanto, repos in-memory para demo sin llaves.
 
     @Provides
     @Singleton
-    fun provideVenueRepository(db: FirebaseFirestore): VenueRepository = FirestoreVenueRepository(db)
+    fun provideVenueRepository(): VenueRepository = InMemoryVenueRepository()
 
     @Provides
     @Singleton
-    fun provideReservationRepository(db: FirebaseFirestore): ReservationRepository = FirestoreReservationRepository(db)
+    fun provideReservationRepository(): ReservationRepository = InMemoryReservationRepository()
+
+    // Referencia para futura integración:
+    // @Provides @Singleton fun provideFirestore(app: Application): FirebaseFirestore { ... }
 }
