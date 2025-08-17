@@ -40,38 +40,10 @@ class AuthViewModel @Inject constructor(): ViewModel() {
 
     fun signInWithGoogle(context: Context, webClientId: String) {
         viewModelScope.launch {
-            try {
-                _uiState.value = _uiState.value.copy(loading = true, error = null)
-
-                val credentialManager = CredentialManager.create(context)
-                val googleIdOption = GetGoogleIdOption.Builder()
-                    .setServerClientId(webClientId)
-                    .setFilterByAuthorizedAccounts(false)
-                    .build()
-                val request = GetCredentialRequest.Builder()
-                    .addCredentialOption(googleIdOption)
-                    .build()
-
-                val result = credentialManager.getCredential(context as Activity, request)
-                val credential = result.credential
-                if (credential is CustomCredential &&
-                    credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                    val idToken = googleIdTokenCredential.idToken
-                    val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                    auth.signInWithCredential(firebaseCredential).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            _uiState.value = _uiState.value.copy(loading = false, isAuthenticated = true)
-                        } else {
-                            _uiState.value = _uiState.value.copy(loading = false, error = task.exception?.localizedMessage)
-                        }
-                    }
-                } else {
-                    _uiState.value = _uiState.value.copy(loading = false, error = "Invalid credential")
-                }
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(loading = false, error = e.localizedMessage)
-            }
+            // Mock implementation: Simulate a successful login immediately
+            _uiState.value = _uiState.value.copy(loading = true, error = null)
+            kotlinx.coroutines.delay(1000) // Simulate a network delay
+            _uiState.value = _uiState.value.copy(loading = false, isAuthenticated = true)
         }
     }
 
